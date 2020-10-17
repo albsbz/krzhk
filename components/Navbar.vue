@@ -11,6 +11,8 @@
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarBasicExample"
+        :class="{ 'is-active': isHamburgerOpen }"
+        @click="openHamburger"
       >
         <span aria-hidden="true" />
         <span aria-hidden="true" />
@@ -18,15 +20,17 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div
+      id="navbarBasicExample"
+      class="navbar-menu"
+      :class="{ 'is-active': isHamburgerOpen }"
+    >
       <div class="navbar-start">
-        <a class="navbar-item">
-          Главная
-        </a>
+        <NuxtLink to="/" class="navbar-item"> Главная </NuxtLink>
 
-        <a class="navbar-item">
+        <NuxtLink to="/articles" class="navbar-item">
           О развитии ребенка
-        </a>
+        </NuxtLink>
 
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
@@ -59,9 +63,9 @@
           </div>
         </div>
 
-        <a class="navbar-item">
+        <NuxtLink to="/contacts" class="navbar-item">
           Связаться с нами
-        </a>
+        </NuxtLink>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Город
@@ -92,7 +96,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isHamburgerOpen: false
+    };
+  },
+  methods: {
+    openHamburger() {
+      this.isHamburgerOpen = !this.isHamburgerOpen;
+    }
+  }
+};
 </script>
 
 <style>
