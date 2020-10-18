@@ -33,10 +33,9 @@
         </NuxtLink>
 
         <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
+          <NuxtLink to="/schools" class="navbar-item">
             Направления кружков
-          </a>
-
+          </NuxtLink>
           <div class="navbar-dropdown">
             <a class="navbar-item">
               Школьная программа

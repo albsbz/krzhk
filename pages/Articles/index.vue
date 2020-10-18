@@ -15,40 +15,27 @@
 </template>
 
 <script>
+// import { mapState } from "vuex";
+
 export default {
-  //   data() {
-  //     return {
-  //       articles: [
-  //         {
-  //           id: 1,
-  //           slug: "articleone"
-  //         },
-  //         {
-  //           id: 2,
-  //           slug: "articletwo"
-  //         }
-  //       ]
-  //     };
-  //   },
-  async asyncData({ $axios, error }) {
+  async fetch({ store, error }) {
     try {
-      const coms = await $axios.$get(
-        "https://jsonplaceholder.typicode.com/comments"
-      );
-      const articles = coms.map(com => {
-        return { ...com, slug: com.name.split(" ").join("") };
-      });
-      return { articles };
-    } catch (err) {
-      error(err);
+      if (store.state.articles.articles.length === 0) {
+        await store.dispatch("articles/fetchArticles");
+      }
+    } catch (er) {
+      error(er);
     }
   },
-  methods() {
-    return {
-      openPage(slug) {
-        this.$router.push("/articles/slug");
-      }
-    };
+  computed: {
+    articles() {
+      return this.$store.state.articles.articles;
+    }
+  },
+  methods: {
+    openPage(slug) {
+      this.$router.push("/articles/slug");
+    }
   }
 };
 </script>
