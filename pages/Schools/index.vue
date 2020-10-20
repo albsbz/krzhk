@@ -1,9 +1,10 @@
 <template>
   <section>
+    {{ $fetchState }}
     <div>Schools</div>
-
-    <p>Fetching posts... {{ $fetchState }}</p>
-
+    page:{{ page }} l:{{
+      Math.round($store.state.schools.schoolsLength / perPage)
+    }}
     <div class="mainwrapper">
       <div class="cardwrapper">
         <ShortArticle
@@ -30,41 +31,46 @@ export default {
     ShortArticle
   },
   async fetch() {
-    console.log("fetching");
-    if (process.client) {
-      this.length = (await this.$content("Schools").fetch()).length;
-      console.log("new length", this.length);
-      this.schools = await this.$content("Schools")
-        .skip(this.page * 2)
-        .limit(2)
-        .fetch();
+    this.schools = await this.$content("Schools")
+      .skip(this.page * this.perPage)
+      .limit(this.perPage)
+      .fetch();
+  },
+  async asyncData(context) {
+    // asyncData(context) {
+    if (process.server) {
+      const disp = await context.store.dispatch("schools/fetchSchoolsLength");
+      console.log("server");
+      return { disp };
+    } else {
+      console.log("client");
     }
   },
-  //   async asyncData({ $content }) {
-  //     const schools = await $content("Schools")
-  //       .skip(0)
-  //       .limit(12)
-  //       .fetch();
-  //     return { schools };
-  //   },
+
   data() {
     return {
       page: 0,
       schools: Array,
-      length: 10
+      perPage: 12
+      // pagelength: 10
     };
   },
   methods: {
     nextPage() {
-      if (this.page < this.length) {
+      if (
+        this.page <
+        Math.round(this.$store.state.schools.schoolsLength / this.perPage) - 1
+      ) {
         this.page++;
         this.$fetch();
+        window.scrollTo(0, top);
       }
     },
     previusPage() {
-      if (this.page > 1) {
+      if (this.page > 0) {
         this.page--;
         this.$fetch();
+        window.scrollTo(0, top);
       }
     }
   }
