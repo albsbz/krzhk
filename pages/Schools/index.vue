@@ -1,9 +1,11 @@
 <template>
   <section>
-    {{ $fetchState }}
     <div>Schools</div>
-    page:{{ page }} l:{{
-      Math.round($store.state.schools.schoolsLength / perPage)
+
+    page:{{ $store.state.schools.page }} l:{{
+      Math.round(
+        $store.getters["schools/schoolsLength"] / $store.state.schools.perPage
+      )
     }}
     <div class="mainwrapper">
       <div class="cardwrapper">
@@ -30,46 +32,48 @@ export default {
   components: {
     ShortArticle
   },
-  async fetch() {
-    this.schools = await this.$content("Schools")
-      .skip(this.page * this.perPage)
-      .limit(this.perPage)
-      .fetch();
-  },
+  // async fetch() {
+  //   this.schools = await this.$content("Schools")
+  //     .skip(this.page * this.perPage)
+  //     .limit(this.perPage)
+  //     .fetch();
+  // },
   async asyncData(context) {
     // asyncData(context) {
     if (process.server) {
-      const disp = await context.store.dispatch("schools/fetchSchoolsLength");
-      console.log("server");
-      return { disp };
-    } else {
-      console.log("client");
+      await context.store.dispatch("schools/fetchSchools");
     }
+    const schools = context.store.getters["schools/onePage"];
+
+    return { schools };
   },
 
   data() {
     return {
-      page: 0,
-      schools: Array,
-      perPage: 12
+      // page: 0,
+      // perPage: 12
       // pagelength: 10
     };
   },
   methods: {
     nextPage() {
       if (
-        this.page <
-        Math.round(this.$store.state.schools.schoolsLength / this.perPage) - 1
+        this.$store.state.schools.page <
+        Math.round(
+          this.$store.getters["schools/schoolsLength"] /
+            this.$store.state.schools.perPage
+        ) -
+          1
       ) {
-        this.page++;
-        this.$fetch();
+        this.$store.dispatch("schools/nextPage");
+        this.schools = this.$store.getters["schools/onePage"];
         window.scrollTo(0, top);
       }
     },
     previusPage() {
-      if (this.page > 0) {
-        this.page--;
-        this.$fetch();
+      if (this.$store.state.schools.page > 0) {
+        this.$store.dispatch("schools/previousPage");
+        this.schools = this.$store.getters["schools/onePage"];
         window.scrollTo(0, top);
       }
     }
