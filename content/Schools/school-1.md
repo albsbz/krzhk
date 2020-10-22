@@ -9,8 +9,8 @@ age: "10+"
 adress: "пр.Соборный, 1"
 phone: "+380001234567"
 classtime:
-  - start: "18:00"
-  - end: "20:00"
+  start: "18:00"
+  end: "20:00"
 shortContent: "Lorem ipsum dolor sit, amet consectetur adipisicing elit."
 ---
 

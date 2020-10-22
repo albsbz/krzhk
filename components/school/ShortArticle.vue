@@ -33,7 +33,9 @@
           >
 
           <br />
-          <time>{{ school.classtime.start }} - {{ school.classtime.end }}</time>
+          <time v-if="school.classtime"
+            >{{ school.classtime["start"] }} - {{ school.classtime.end }}</time
+          >
         </div>
       </div>
     </div>

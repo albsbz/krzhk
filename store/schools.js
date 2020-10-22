@@ -1,7 +1,9 @@
 export const state = () => ({
   page:0,
   schools:[],
-  perPage: 12
+  perPage: 12,
+  filterTag:"Все",
+  filterDistrict: "Все",
 })
 
 export const mutations = {
@@ -10,11 +12,20 @@ export const mutations = {
     state.schools=payload
     },
     nextPage (state){
-      console.log("nextPage")
-      state.page++},
+      state.page++
+    },
     previousPage (state){
-      console.log("previousPage")
-      state.page--}
+      state.page--
+    },
+    zeroPage (state){
+      state.page=0
+    },
+    setFilterTag(state, payload) {
+      state.filterTag=payload
+    },
+    setFilterDistrict(state, payload) {
+      state.filterDistrict=payload
+    }
 }
 
 export const actions= {
@@ -33,13 +44,12 @@ export const actions= {
 }
 
 export const getters={
-
-  schoolsLength: state => {
-      return state.schools.length;
-    },
-  onePage:state=>{
-
-    return state.schools.slice(state.page*state.perPage, state.page*state.perPage+state.perPage)
-  }
-
+  tags:(state)=> [...['Все'], ...new Set(state.schools.map(school=>school.tags).flat(1))],
+  districts:(state)=>[...['Все'], ...new Set(state.schools.map(school=>school.district))],
+  schoolsLength: (state, getters) => getters.filterAll.length,
+  onePage:(state, getters)=>getters.filterAll.slice(state.page*state.perPage, state.page*state.perPage+state.perPage),
+  filterAll:(state, getters)=>getters.filterDistrict.filter(x => getters.filterTag.includes(x)),
+  filterDistrict: (state)=>state.filterDistrict!=="Все"?state.schools.filter(school=>school.district===state.filterDistrict):state.schools,
+  filterTag: (state)=>state.filterTag!=="Все"?state.schools.filter(school=>school.tags.includes(state.filterTag)):state.schools
+  
 }

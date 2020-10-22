@@ -1,15 +1,15 @@
 ---
-title: "Грани"
+title: "Грани9"
 city: "Запорожье"
 district: "Вознесеновский"
 tags:
-  - "моделирование"
+  - "роботы"
 age: "12+"
 adress: "пр.Соборный, 50"
 phone: "+380007654321"
 classtime:
-  - start: "17:00"
-  - end: "28:00"
+  start: "17:00"
+  end: "28:00"
 shortContent: "Lorem ipsum dolor sit, amet consectetur adipisicing elit."
 ---
 

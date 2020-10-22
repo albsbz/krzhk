@@ -3,7 +3,7 @@
     <p>Articles</p>
     <p></p>
     <ul>
-      <li v-for="article of articles" :key="article.id">
+      <li v-for="article of articles" :key="article.path">
         <NuxtLink
           :to="`/articles/${article.slug}`"
           @click.prevent="openPage(article.slug)"
