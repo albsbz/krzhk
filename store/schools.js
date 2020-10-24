@@ -36,7 +36,6 @@ export const actions= {
     commit('setSchools', schools)
   },
   async getSchoolBySlug ({commit}, {slug}) {
-    console.log(1)
     const school = (await this.$content("Schools").where({ title: { $eq: slug } })
     .fetch())[0];
     return school
