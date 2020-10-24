@@ -3,10 +3,11 @@
     <div class="card">
       <div class="card-image">
         <figure class="image is-4by3">
-          <img
-            src="https://bulma.io/images/placeholders/1280x960.png"
-            alt="Placeholder image"
-          />
+          <NLink :to="'schools/' + school.title">
+            <img
+              src="https://bulma.io/images/placeholders/1280x960.png"
+              alt="Placeholder image"
+          /></NLink>
         </figure>
       </div>
       <div class="card-content">
@@ -21,14 +22,21 @@
           </div>
           <div class="media-content">
             <p class="title is-4">{{ school.title }}</p>
-            <p class="subtitle is-6">{{ school.district }}</p>
+            <a class="subtitle is-6 district" @click.prevent="setDistrict"
+              ><span class="tag is-normal">{{ school.district }}</span></a
+            >
           </div>
         </div>
 
         <div class="content">
           {{ school.shortContent }}<a href="tel">{{ school.phone }}</a
           >.
-          <a v-for="tag of school.tags" :key="tag" :href="'@' + tag">
+          <a
+            v-for="tag of school.tags"
+            :key="tag"
+            class="tag is-success is-light"
+            @click.prevent="setTag(tag)"
+          >
             #{{ tag }}</a
           >
 
@@ -51,7 +59,19 @@ export default {
         ? this.$props.school.shortContent
         : this.$props.school.shortContent;
     }
+  },
+  methods: {
+    setTag(tag) {
+      this.$store.commit("schools/setFilterTag", tag);
+    },
+    setDistrict() {
+      this.$store.commit("schools/setFilterDistrict", this.school.district);
+    }
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.district {
+  display: block;
+}
+</style>

@@ -35,12 +35,14 @@ export const actions= {
     .fetch();
     commit('setSchools', schools)
   },
-  nextPage({commit}){
-    commit('nextPage')
-  },
-  previousPage({commit}){
-    commit('previousPage')
+  async getSchoolBySlug ({commit}, {slug}) {
+    console.log(1)
+    const school = (await this.$content("Schools").where({ title: { $eq: slug } })
+    .fetch())[0];
+    return school
   }
+
+
 }
 
 export const getters={

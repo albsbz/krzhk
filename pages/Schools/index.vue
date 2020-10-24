@@ -49,12 +49,14 @@
             </div>
           </div>
         </div>
+        <button class="button is-small" @click="clearAllFilters">
+          Сбросить фильтр
+        </button>
       </aside>
       <nav class="pagination" role="navigation" aria-label="pagination">
-        <a class="pagination-previous" @click.prevent="previousPage"
-          >Previous</a
-        >
-        <a class="pagination-next" @click.prevent="nextPage">Next page</a>
+        <a class="pagination-previous" @click.prevent="previousPage">Назад</a>
+        <a class="pagination-link">{{ $store.state.schools.page + 1 }}</a>
+        <a class="pagination-next" @click.prevent="nextPage">Вперед</a>
       </nav>
     </div>
   </section>
@@ -119,29 +121,41 @@ export default {
         ) -
           1
       ) {
-        this.$store.dispatch("schools/nextPage");
+        this.$store.commit("schools/nextPage");
         // this.schools = this.$store.getters["schools/onePage"];
         window.scrollTo(0, top);
       }
     },
     previousPage() {
       if (this.$store.state.schools.page > 0) {
-        this.$store.dispatch("schools/previousPage");
+        this.$store.commit("schools/previousPage");
         // this.schools = this.$store.getters["schools/onePage"];
         window.scrollTo(0, top);
       }
     },
     changeFilter() {
       this.$store.commit("schools/zeroPage");
+    },
+    clearAllFilters() {
+      this.$store.commit("schools/setFilterTag", "Все");
+      this.$store.commit("schools/setFilterDistrict", "Все");
+      this.changeFilter();
     }
   }
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .sidebar {
   display: block;
   max-width: 300px;
   grid-area: sidebar;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 5%;
+  width: 100%;
+  height: 300px;
+
+  overflow: auto;
   /* background-color: aqua; */
 }
 .pagination {
@@ -163,7 +177,21 @@ export default {
 .cardwrapper {
   grid-area: cardwrapper;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
 }
+</style>
+<style lang="sass" scoped>
+@import "~bulma/sass/utilities/functions"
+@import "~bulma/sass/utilities/initial-variables"
+@import "~bulma/sass/utilities/derived-variables"
+@import "~bulma/sass/utilities/mixins"
++desktop
+  .cardwrapper
+    grid-template-columns: repeat(4, 1fr)
++tablet-only
+  .cardwrapper
+    grid-template-columns: repeat(2, 1fr)
++mobile
+  .cardwrapper
+    grid-template-columns: repeat(1, 1fr)
 </style>
