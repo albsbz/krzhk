@@ -2,7 +2,9 @@ export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: true,
   target:'static',
-
+  env: {
+    GMAP_API_KEY: 'AIzaSyA5X3nMtXIcE__bKV8sSB3xqzxzxC_Urm0'
+  },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'krzhk',
@@ -21,7 +23,7 @@ export default {
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [{ src: '~plugins/vue-carousel', ssr: false }],
+  plugins: [{ src: '~plugins/vue-carousel', ssr: false }, { src: '~plugins/gmap', ssr: false }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
