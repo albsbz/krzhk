@@ -219,4 +219,9 @@ export default {
 .map {
   justify-self: center;
 }
+
+/* Don't use this in real life, it may hide unexpected elements */
+::v-deep .gm-ui-hover-effect {
+  display: none!important;
+}
 </style>
