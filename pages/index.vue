@@ -1,49 +1,87 @@
 <template>
-  <div class="container">
+  <div class="container mainwrapper">
     <h1 class="title is-large">Детские кружки в г. Запорожье</h1>
-    <!-- <div class="dumb"></div> -->
-    <GmapMap
-      :center="{ lat: 47.840476, lng: 35.137578 }"
-      :zoom="10"
-      map-type-id="roadmap"
-      class="box map"
-      style="width: 500px; height: 300px"
-    >
-      <GmapInfoWindow :position="infoWindowPos" :opened="infoWinOpen">
-        <article class="message is-link">
-          <div class="message-header">
-            <NLink :to="'schools/' + infoOptions.content"
-              ><p>{{ infoOptions.content }}</p></NLink
-            >
-            <button
-              class="delete"
-              aria-label="delete"
-              @click="infoWinOpen = false"
-            ></button>
+    <div class="mapwrapper">
+      <!-- <div class="dumb"></div> -->
+      <GmapMap
+        :center="{ lat: 47.840476, lng: 35.137578 }"
+        :zoom="10"
+        map-type-id="roadmap"
+        class="box map"
+        style="width: 500px; height: 300px"
+      >
+        <GmapInfoWindow :position="infoWindowPos" :opened="infoWinOpen">
+          <article class="message is-link">
+            <div class="message-header">
+              <NLink :to="'schools/' + infoOptions.content"
+                ><p>{{ infoOptions.content }}</p></NLink
+              >
+              <button
+                class="delete"
+                aria-label="delete"
+                @click="infoWinOpen = false"
+              ></button>
+            </div>
+            <div class="message-body">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut,
+              porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla.
+              Nullam gravida purus diam, et dictum
+              <a>felis venenatis</a> efficitur. Aenean ac
+              <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
+              sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi
+              magna a neque. Donec dui urna, vehicula et sem eget, facilisis
+              sodales sem.
+            </div>
+          </article>
+        </GmapInfoWindow>
+        <GmapCluster>
+          <GmapMarker
+            v-for="(m, index) in markers"
+            :key="index"
+            :position="m.position"
+            :clickable="true"
+            :draggable="false"
+            @click="toggleInfoWindow(m, index)"
+          />
+        </GmapCluster>
+      </GmapMap>
+    </div>
+    <aside class="sidebar box">
+      <h6>Фильтр</h6>
+      <div class="field">
+        <label class="label">Тэги</label>
+        <div class="control">
+          <div class="select">
+            <select v-model="selectedTag" @change="changeFilter">
+              <option v-for="tag of tags" :key="tag" :value="tag">{{
+                tag
+              }}</option>
+            </select>
           </div>
-          <div class="message-body">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            <strong>Pellentesque risus mi</strong>, tempus quis placerat ut,
-            porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam
-            gravida purus diam, et dictum <a>felis venenatis</a> efficitur.
-            Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales,
-            arcu et sollicitudin porttitor, tortor urna tempor ligula, id
-            porttitor mi magna a neque. Donec dui urna, vehicula et sem eget,
-            facilisis sodales sem.
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Район</label>
+        <div class="control">
+          <div class="select">
+            <select v-model="selectedDistrict" @change="changeFilter">
+              <option
+                v-for="district of districts"
+                :key="district"
+                :value="district"
+              >
+                {{ district }}</option
+              >
+            </select>
           </div>
-        </article>
-      </GmapInfoWindow>
-      <GmapCluster>
-        <GmapMarker
-          v-for="(m, index) in markers"
-          :key="index"
-          :position="m.position"
-          :clickable="true"
-          :draggable="false"
-          @click="toggleInfoWindow(m, index)"
-        />
-      </GmapCluster>
-    </GmapMap>
+        </div>
+      </div>
+      <button class="button is-small" @click="clearAllFilters">
+        Сбросить фильтр
+      </button>
+    </aside>
   </div>
 </template>
 
@@ -69,13 +107,16 @@ export default {
           width: 0,
           height: -35
         }
-      }
+      },
+
+      tags: this.$store.getters["schools/tags"],
+      districts: this.$store.getters["schools/districts"]
     };
   },
   computed: {
     google: gmapApi,
     schools() {
-      return this.$store.state.schools.schools;
+      return this.$store.getters["schools/filterAll"];
     },
     markers() {
       return this.schools.map(school => {
@@ -84,6 +125,22 @@ export default {
           infoText: school.title
         };
       });
+    },
+    selectedTag: {
+      get() {
+        return this.$store.state.schools.filterTag;
+      },
+      set(value) {
+        this.$store.commit("schools/setFilterTag", value);
+      }
+    },
+    selectedDistrict: {
+      get() {
+        return this.$store.state.schools.filterDistrict;
+      },
+      set(value) {
+        this.$store.commit("schools/setFilterDistrict", value);
+      }
     }
   },
   methods: {
@@ -101,6 +158,14 @@ export default {
         this.infoWinOpen = true;
         this.currentMidx = idx;
       }
+    },
+    changeFilter() {
+      this.$store.commit("schools/zeroPage");
+    },
+    clearAllFilters() {
+      this.$store.commit("schools/setFilterTag", "Все");
+      this.$store.commit("schools/setFilterDistrict", "Все");
+      this.changeFilter();
     }
   }
 };
@@ -115,10 +180,43 @@ export default {
   height: 300px;
   background-color: aqua;
 }
-.title,
-.map {
-  margin: 0 auto;
+.sidebar {
   display: block;
+  max-width: 300px;
+  grid-area: sidebar;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 5%;
+  width: 100%;
+  height: 300px;
+
+  overflow: auto;
+  /* background-color: aqua; */
+}
+.mainwrapper {
+  display: grid;
+  grid-template-columns: auto 150px;
+  grid-template-rows: auto 50px;
+  grid-template-areas:
+    "title title"
+    "cardwrapper sidebar"
+    "pagination sidebar";
+  grid-gap: 10px;
+}
+
+.mapwrapper {
+  grid-area: cardwrapper;
+  display: grid;
+  grid-gap: 10px;
+}
+.title {
   text-align: center;
+  grid-area: title;
+  display: grid;
+  grid-gap: 10px;
+}
+.dumb,
+.map {
+  justify-self: center;
 }
 </style>
