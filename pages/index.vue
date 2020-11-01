@@ -13,25 +13,12 @@
         <GmapInfoWindow :position="infoWindowPos" :opened="infoWinOpen">
           <article class="message is-link">
             <div class="message-header">
-              <NLink :to="'schools/' + infoOptions.content"
-                ><p>{{ infoOptions.content }}</p></NLink
-              >
-              <button
-                class="delete"
-                aria-label="delete"
-                @click="infoWinOpen = false"
-              ></button>
+              <NLink :to="'schools/' + infoOptions.content.title">
+                {{ infoOptions.content.title }}
+              </NLink>
             </div>
             <div class="message-body">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut,
-              porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla.
-              Nullam gravida purus diam, et dictum
-              <a>felis venenatis</a> efficitur. Aenean ac
-              <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
-              sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi
-              magna a neque. Donec dui urna, vehicula et sem eget, facilisis
-              sodales sem.
+              {{ infoOptions.content.address }}
             </div>
           </article>
         </GmapInfoWindow>
@@ -47,51 +34,19 @@
         </GmapCluster>
       </GmapMap>
     </div>
-    <aside class="sidebar box">
-      <h6>Фильтр</h6>
-      <div class="field">
-        <label class="label">Тэги</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="selectedTag" @change="changeFilter">
-              <option v-for="tag of tags" :key="tag" :value="tag">{{
-                tag
-              }}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label">Район</label>
-        <div class="control">
-          <div class="select">
-            <select v-model="selectedDistrict" @change="changeFilter">
-              <option
-                v-for="district of districts"
-                :key="district"
-                :value="district"
-              >
-                {{ district }}</option
-              >
-            </select>
-          </div>
-        </div>
-      </div>
-      <button class="button is-small" @click="clearAllFilters">
-        Сбросить фильтр
-      </button>
-    </aside>
+    <appSidebar class="sidebar" />
   </div>
 </template>
 
 <script>
 import { gmapApi } from "vue2-google-maps";
 import GmapCluster from "vue2-google-maps/dist/components/cluster";
+import appSidebar from "@/components/Sidebar.vue";
 
 export default {
   components: {
-    GmapCluster
+    GmapCluster,
+    appSidebar
   },
   data() {
     return {
@@ -107,10 +62,7 @@ export default {
           width: 0,
           height: -35
         }
-      },
-
-      tags: this.$store.getters["schools/tags"],
-      districts: this.$store.getters["schools/districts"]
+      }
     };
   },
   computed: {
@@ -122,25 +74,9 @@ export default {
       return this.schools.map(school => {
         return {
           position: school.geometry.location,
-          infoText: school.title
+          infoText: { title: school.title, address: school.address }
         };
       });
-    },
-    selectedTag: {
-      get() {
-        return this.$store.state.schools.filterTag;
-      },
-      set(value) {
-        this.$store.commit("schools/setFilterTag", value);
-      }
-    },
-    selectedDistrict: {
-      get() {
-        return this.$store.state.schools.filterDistrict;
-      },
-      set(value) {
-        this.$store.commit("schools/setFilterDistrict", value);
-      }
     }
   },
   methods: {
@@ -158,14 +94,6 @@ export default {
         this.infoWinOpen = true;
         this.currentMidx = idx;
       }
-    },
-    changeFilter() {
-      this.$store.commit("schools/zeroPage");
-    },
-    clearAllFilters() {
-      this.$store.commit("schools/setFilterTag", "Все");
-      this.$store.commit("schools/setFilterDistrict", "Все");
-      this.changeFilter();
     }
   }
 };
@@ -221,7 +149,7 @@ export default {
 }
 
 /* Don't use this in real life, it may hide unexpected elements */
-::v-deep .gm-ui-hover-effect {
+/* ::v-deep .gm-ui-hover-effect {
   display: none!important;
-}
+} */
 </style>

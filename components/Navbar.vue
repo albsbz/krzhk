@@ -103,7 +103,7 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Modal title</p>
+          <p class="modal-card-title">Что бы вы хотели написать нам?</p>
           <button
             class="delete"
             aria-label="close"
@@ -111,10 +111,58 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <!-- Content ... -->
+          <form
+            action="https://mailthis.to/krzhk"
+            method="POST"
+            encType="multipart/form-data"
+          >
+            <div class="field">
+              <label class="label">Имя</label>
+              <div class="control">
+                <input
+                  type="text"
+                  class="input"
+                  name="name"
+                  placeholder="Ваше имя"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Ваш E-mail</label>
+              <div class="control">
+                <input
+                  type="email"
+                  name="_replyto"
+                  class="input"
+                  placeholder="Електронная почта"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Ваше сообщение</label>
+              <div class="control">
+                <textarea
+                  name="message"
+                  class="input"
+                  placeholder="Сообщение"
+                ></textarea>
+              </div>
+            </div>
+            <input
+              type="hidden"
+              name="_subject"
+              value="Contact form submitted"
+            />
+            <input type="hidden" name="_after" value="/" />
+            <input type="hidden" name="_honeypot" value="" />
+            <input type="hidden" name="_confirmation" value="" />
+            <input type="submit" value="Send" class="hidden" id="myform" />
+          </form>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success">Save changes</button>
+          <label class="button is-success" for="myform" tabindex="0"
+            >Отправить</label
+          >
         </footer>
       </div>
     </div>
@@ -163,5 +211,8 @@ export default {
 <style>
 .search {
   max-width: 100px;
+}
+.hidden {
+  display: none;
 }
 </style>
