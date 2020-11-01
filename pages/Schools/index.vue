@@ -187,11 +187,11 @@ export default {
 @import "~bulma/sass/utilities/mixins"
 +desktop
   .cardwrapper
-    grid-template-columns: repeat(4, 1fr)
+    grid-template-columns: repeat(4, minmax(0, 1fr))
 +tablet-only
   .cardwrapper
-    grid-template-columns: repeat(2, 1fr)
+    grid-template-columns: repeat(2, minmax(0, 1fr))
 +mobile
   .cardwrapper
-    grid-template-columns: repeat(1, 1fr)
+    grid-template-columns: repeat(1, minmax(0, 1fr))
 </style>

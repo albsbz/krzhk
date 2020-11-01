@@ -21,7 +21,7 @@
             </figure>
           </div>
           <div class="media-content">
-            <p class="title is-6">{{ school.title }}</p>
+            <p class="title school-title">{{ school.title }}</p>
             <a class="subtitle is-6 district" @click.prevent="setDistrict"
               ><span class="tag is-normal">{{
                 school.district ? school.district : "-"
@@ -76,5 +76,8 @@ export default {
 <style scoped>
 .district {
   display: block;
+}
+.school-title {
+  font-size: 12px;
 }
 </style>
