@@ -1,5 +1,11 @@
 export const state = () => ({
-  articles: []
+  articles: [
+    {name:'article1_name', slug:'article1_slug',  topic: "genre1"},
+    {name:'article2_name', slug:'article2_slug', topic: "genre2"},
+    {name:'article3_name', slug:'article3_slug', topic: "genre3"},
+    {name:'article4_name', slug:'article4_slug',  topic: "genre1"},
+    {name:'article5_name', slug:'article5_slug', topic: "genre2"},
+  ]
 })
 
 export const mutations = {
@@ -9,19 +15,10 @@ export const mutations = {
   }
 }
 export const actions= {
-  async fetchArticles ({commit}) {
 
-    try {
-        const coms = await this.$axios.$get(
-          "https://jsonplaceholder.typicode.com/comments"
-        );
-        const articles = coms.map(com => {
-          return { ...com, slug: com.name.split(" ").join("") };
-        });
-        commit('setArticles', articles)
-    } 
-    catch (err) {
-      throw new Error (err);
-    }
-  }
+}
+
+export const getters={
+  topics:(state)=> [...new Set(state.articles.map(article=>article.topic).flat(1))],  
+
 }

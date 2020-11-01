@@ -74,13 +74,13 @@ export default {
   //   await this.$store.dispatch("schools/fetchSchools");
   // },
   // fetchOnServer: false,
-  async asyncData(context) {
-    // if (process.server) {
-    await context.store.dispatch("schools/fetchSchools");
-    // }
-    // const schools = context.store.getters["schools/onePage"];
-    // return { schools };
-  },
+  // async asyncData(context) {
+  //   // if (process.server) {
+  //   await context.store.dispatch("schools/fetchSchools");
+  //   // }
+  //   // const schools = context.store.getters["schools/onePage"];
+  //   // return { schools };
+  // },
 
   data() {
     return {

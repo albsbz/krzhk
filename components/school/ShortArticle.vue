@@ -21,15 +21,18 @@
             </figure>
           </div>
           <div class="media-content">
-            <p class="title is-4">{{ school.title }}</p>
+            <p class="title is-6">{{ school.title }}</p>
             <a class="subtitle is-6 district" @click.prevent="setDistrict"
-              ><span class="tag is-normal">{{ school.district }}</span></a
+              ><span class="tag is-normal">{{
+                school.district ? school.district : "-"
+              }}</span></a
             >
           </div>
         </div>
 
         <div class="content">
-          {{ school.shortContent }}<a href="tel">{{ school.phone }}</a
+          {{ school.shortContent ? school.shortContent : ""
+          }}<a href="tel">{{ school.phone ? school.phone : "" }}</a
           >.
           <a
             v-for="tag of school.tags"

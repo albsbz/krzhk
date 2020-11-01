@@ -37,17 +37,13 @@
             Направления кружков
           </NuxtLink>
           <div class="navbar-dropdown">
-            <a class="navbar-item">
-              Школьная программа
-            </a>
-            <a class="navbar-item">
-              Дополнительное образование
-            </a>
-            <a class="navbar-item">
-              Искуство
-            </a>
-            <a class="navbar-item">
-              Спорт
+            <a
+              v-for="tag of tags"
+              :key="tag"
+              class="navbar-item"
+              @click.prevent="setTag(tag)"
+            >
+              {{ tag }}
             </a>
           </div>
         </div>
@@ -62,10 +58,20 @@
           </div>
         </div>
 
-        <NuxtLink to="/contacts" class="navbar-item">
-          Связаться с нами
-        </NuxtLink>
-        <div class="navbar-item has-dropdown is-hoverable">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a
+              class="button is-primary has-background-success"
+              @click.prevent="showModal = !showModal"
+              >Написать нам</a
+            >
+          </div>
+        </div>
+
+        <!-- <NuxtLink to="/contacts" class="navbar-item" @click>
+          Написать нам
+        </NuxtLink> -->
+        <!-- <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Город
           </a>
@@ -79,7 +85,8 @@
             </a>
           </div>
         </div>
-        <div class="navbar-item">
+        -->
+        <!-- <div class="navbar-item">
           <div class="buttons">
             <a class="button is-primary has-background-success">
               <strong>Регистрация</strong>
@@ -88,22 +95,66 @@
               Вход
             </a>
           </div>
-        </div>
+        </div>  -->
       </div>
     </div>
+    <!-- Modal -->
+    <div :class="{ 'is-active': showModal }" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Modal title</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="showModal = !showModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <!-- Content ... -->
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success">Save changes</button>
+        </footer>
+      </div>
+    </div>
+    <!-- Modal end-->
   </nav>
 </template>
 
 <script>
 export default {
+  // async asyncData(context) {
+  //   await context.store.dispatch("schools/fetchSchools");
+  // },
+  // async fetch() {
+  //   console.log("fetch");
+  //   await this.$store.dispatch("schools/fetchSchools");
+  // },
+  // fetchOnServer: false,
   data() {
     return {
-      isHamburgerOpen: false
+      isHamburgerOpen: false,
+      tags: [],
+      showModal: false
     };
+  },
+  // computed: {
+  //   tags() {
+  //     return
+  //   }
+  // },
+  async created() {
+    await this.$store.dispatch("schools/fetchSchools");
+    this.tags = this.$store.getters["schools/tags"];
   },
   methods: {
     openHamburger() {
       this.isHamburgerOpen = !this.isHamburgerOpen;
+    },
+    setTag(tag) {
+      this.$store.commit("schools/setFilterTag", tag);
+      this.$router.push({ path: "schools" });
     }
   }
 };

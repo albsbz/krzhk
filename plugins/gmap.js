@@ -24,4 +24,6 @@ Vue.use(VueGoogleMaps, {
   /// / Vue.component('GmapMarker', GmapMarker)
   /// / then disable the following:
   // installComponents: true,
+  
+  installComponents: true
 })
