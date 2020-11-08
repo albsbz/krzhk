@@ -114,6 +114,7 @@ export default {
   grid-area: cardwrapper;
   display: grid;
   grid-gap: 10px;
+  grid-auto-rows: 1fr;
 }
 </style>
 <style lang="sass" scoped>

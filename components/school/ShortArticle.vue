@@ -22,6 +22,7 @@
           </div>
           <div class="media-content">
             <p class="title school-title">{{ school.title }}</p>
+
             <a class="subtitle is-6 district" @click.prevent="setDistrict"
               ><span class="tag is-normal">{{
                 school.district ? school.district : "-"
@@ -32,12 +33,13 @@
 
         <div class="content">
           {{ school.shortContent ? school.shortContent : "" }}
-          <a
-            v-if="school.phone && school.phone[0]"
-            class="is-size-7"
-            href="tel"
-            >{{ school.phone[0] }}</a
-          >
+
+          <div>
+            <a class="is-size-7" href="tel">{{
+              school.phone[0] || "&nbsp;"
+            }}</a>
+          </div>
+
           <a
             v-for="tag of school.tags"
             :key="tag"
@@ -83,5 +85,20 @@ export default {
 }
 .school-title {
   font-size: 12px;
+}
+.card {
+  height: 100%;
+}
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+.card {
+  display: flex;
+  flex-direction: column;
 }
 </style>
