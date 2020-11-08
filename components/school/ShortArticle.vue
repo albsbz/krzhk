@@ -31,9 +31,13 @@
         </div>
 
         <div class="content">
-          {{ school.shortContent ? school.shortContent : ""
-          }}<a href="tel">{{ school.phone ? school.phone : "" }}</a
-          >.
+          {{ school.shortContent ? school.shortContent : "" }}
+          <a
+            v-if="school.phone && school.phone[0]"
+            class="is-size-7"
+            href="tel"
+            >{{ school.phone[0] }}</a
+          >
           <a
             v-for="tag of school.tags"
             :key="tag"

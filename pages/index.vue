@@ -11,7 +11,7 @@
         style="width: 500px; height: 300px"
       >
         <GmapInfoWindow :position="infoWindowPos" :opened="infoWinOpen">
-          <article class="message is-link">
+          <!-- <article class="message is-link">
             <div class="message-header">
               <NLink :to="'schools/' + infoOptions.content.title">
                 {{ infoOptions.content.title }}
@@ -20,9 +20,23 @@
             <div class="message-body">
               {{ infoOptions.content.address }}
             </div>
+          </article> -->
+          <article
+            v-for="content in infoOptions.content"
+            :key="content.title"
+            class="message is-link"
+          >
+            <div class="message-header">
+              <NLink :to="'schools/' + content.title">
+                {{ content.title }}
+              </NLink>
+            </div>
+            <div class="message-body">
+              {{ content.address }}
+            </div>
           </article>
         </GmapInfoWindow>
-        <GmapCluster>
+        <GmapCluster :max-zoom="15">
           <GmapMarker
             v-for="(m, index) in markers"
             :key="index"
@@ -70,21 +84,52 @@ export default {
     schools() {
       return this.$store.getters["schools/filterAll"];
     },
-    markers() {
-      return this.schools.map(school => {
-        return {
-          position: school.geometry.location,
-          infoText: { title: school.title, address: school.address }
-        };
+    schoolsCoordinates() {
+      const coord = {};
+      this.schools.map(school => {
+        coord[
+          school.geometry?.location.lat + "-" + school.geometry?.location.lng
+        ] = school.title;
       });
+      return coord;
+    },
+    markers() {
+      return (
+        this.schools
+          .filter(school => {
+            if (school.geometry) {
+              return school;
+            }
+          })
+
+          // .map((school)=>{
+          //   const currentCord=school.geometry.location.lat+school.geometry.location.lng
+          //   if (currentCord in this.schoolsCordinates){
+
+          //   }
+          // })
+          .map(school => {
+            return {
+              position: school.geometry.location,
+              infoText: { title: school.title, address: school.address }
+            };
+          })
+      );
     }
   },
   methods: {
     toggleInfoWindow(marker, idx) {
       this.infoWindowPos = marker.position;
-      // this.infoOptions.content = marker.infoText;
-      this.infoOptions.content = marker.infoText;
-
+      const infoText = [];
+      this.markers.forEach(oneMarker => {
+        if (
+          oneMarker.position.lat + "-" + oneMarker.position.lng ===
+          marker.position.lat + "-" + marker.position.lng
+        ) {
+          infoText.push(oneMarker.infoText);
+        }
+      });
+      this.infoOptions.content = infoText;
       // check if its the same marker that was selected if yes toggle
       if (this.currentMidx === idx) {
         this.infoWinOpen = !this.infoWinOpen;
