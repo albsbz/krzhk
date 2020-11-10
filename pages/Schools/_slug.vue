@@ -1,7 +1,6 @@
 <template>
   <section>
     <div class="container box">
-      <h1>{{ school }}</h1>
       <h3 class="title is-3">{{ school.title }}</h3>
       <span class="tag is-info is-normal district">{{ school.district }}</span>
       <div class="tags">
@@ -26,15 +25,11 @@
 <script>
 export default {
   async asyncData({ params, store }) {
-    const slug = params.slug; // When calling /abc the slug will be "abc"
-    // debugger;
-    // debugger;
+    const slug = params.slug;
+
     const school = await store.dispatch("schools/getSchoolBySlug", { slug });
-    // const school = await store.state.schools.schools.filter(
-    //   el => el.title === slug
-    // )[0];
+
     return { slug, school };
-    // return { slug };
   },
   data() {
     return {
