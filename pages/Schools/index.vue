@@ -7,9 +7,12 @@
         $store.getters["schools/schoolsLength"] / $store.state.schools.perPage
       )
     }}
-
+    <button class="button is-light" @click="toggleFilter">
+      Показать фильтр
+    </button>
     onePage.schoolsLength: {{ $store.getters["schools/schoolsLength"] }}
-    <div class="mainwrapper">
+
+    <div class="mainwrapper" :class="{ nosidebar: refreshWrapper }">
       <div class="cardwrapper">
         <ShortArticle
           v-for="school of schools"
@@ -40,6 +43,15 @@ export default {
   computed: {
     schools() {
       return this.$store.getters["schools/onePage"];
+    },
+    refreshWrapper() {
+      const showWrapper = !this.displaySidebar;
+      return showWrapper;
+    },
+    displaySidebar: {
+      get() {
+        return this.$store.state.schools.showFilter;
+      }
     }
   },
   // async fetch() {
@@ -76,6 +88,9 @@ export default {
         // this.schools = this.$store.getters["schools/onePage"];
         window.scrollTo(0, top);
       }
+    },
+    toggleFilter() {
+      this.$store.commit("schools/toggleFilter");
     }
   }
 };
@@ -108,6 +123,12 @@ export default {
     "cardwrapper sidebar"
     "pagination sidebar";
   grid-gap: 10px;
+}
+.mainwrapper.nosidebar {
+  grid-template-areas:
+    "cardwrapper"
+    "pagination";
+  grid-template-columns: auto;
 }
 
 .cardwrapper {

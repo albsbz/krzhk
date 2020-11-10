@@ -1,8 +1,11 @@
 <template>
-  <div class="container mainwrapper">
+  <div class="container mainwrapper" :class="{ nosidebar: !displaySidebar }">
     <h1 class="title is-large">Детские кружки в г. Запорожье</h1>
     <div class="mapwrapper">
       <!-- <div class="dumb"></div> -->
+      <button class="button is-light" @click="toggleFilter">
+        Показать фильтр
+      </button>
       <GmapMap
         :center="{ lat: 47.840476, lng: 35.137578 }"
         :zoom="10"
@@ -11,16 +14,6 @@
         style="width: 500px; height: 300px"
       >
         <GmapInfoWindow :position="infoWindowPos" :opened="infoWinOpen">
-          <!-- <article class="message is-link">
-            <div class="message-header">
-              <NLink :to="'schools/' + infoOptions.content.title">
-                {{ infoOptions.content.title }}
-              </NLink>
-            </div>
-            <div class="message-body">
-              {{ infoOptions.content.address }}
-            </div>
-          </article> -->
           <article
             v-for="content in infoOptions.content"
             :key="content.title"
@@ -115,6 +108,11 @@ export default {
             };
           })
       );
+    },
+    displaySidebar: {
+      get() {
+        return this.$store.state.schools.showFilter;
+      }
     }
   },
   methods: {
@@ -139,6 +137,9 @@ export default {
         this.infoWinOpen = true;
         this.currentMidx = idx;
       }
+    },
+    toggleFilter() {
+      this.$store.commit("schools/toggleFilter");
     }
   }
 };
@@ -175,6 +176,13 @@ export default {
     "cardwrapper sidebar"
     "pagination sidebar";
   grid-gap: 10px;
+}
+.mainwrapper .nosidebar {
+  grid-template-areas:
+    "title"
+    "cardwrapper"
+    "pagination";
+  grid-template-columns: auto;
 }
 
 .mapwrapper {
