@@ -1,18 +1,10 @@
 <template>
   <section>
-    <div>Schools</div>
-
-    page:{{ $store.state.schools.page + 1 }} l:{{
-      Math.ceil(
-        $store.getters["schools/schoolsLength"] / $store.state.schools.perPage
-      )
-    }}
-    <button class="button is-light" @click="toggleFilter">
+    <button class="button is-light filter-button" @click="toggleFilter">
       Показать фильтр
     </button>
-    onePage.schoolsLength: {{ $store.getters["schools/schoolsLength"] }}
 
-    <div class="mainwrapper" :class="{ nosidebar: refreshWrapper }">
+    <div class="mainwrapper" :class="{ nosidebar: !displaySidebar }">
       <div class="cardwrapper">
         <ShortArticle
           v-for="school of schools"
@@ -20,8 +12,9 @@
           :school="school"
         />
       </div>
-
-      <appSidebar class="sidebar" />
+      <transition name="slide-fade">
+        <appSidebar class="sidebar" />
+      </transition>
       <nav class="pagination" role="navigation" aria-label="pagination">
         <a class="pagination-previous" @click.prevent="previousPage">Назад</a>
         <a class="pagination-link">{{ $store.state.schools.page + 1 }}</a>
@@ -44,29 +37,12 @@ export default {
     schools() {
       return this.$store.getters["schools/onePage"];
     },
-    refreshWrapper() {
-      const showWrapper = !this.displaySidebar;
-      return showWrapper;
-    },
     displaySidebar: {
       get() {
         return this.$store.state.schools.showFilter;
       }
     }
   },
-  // async fetch() {
-  //   console.log("fetch");
-  //   await this.$store.dispatch("schools/fetchSchools");
-  // },
-  // fetchOnServer: false,
-  // async asyncData(context) {
-  //   // if (process.server) {
-  //   await context.store.dispatch("schools/fetchSchools");
-  //   // }
-  //   // const schools = context.store.getters["schools/onePage"];
-  //   // return { schools };
-  // },
-
   methods: {
     nextPage() {
       if (
@@ -78,7 +54,6 @@ export default {
           1
       ) {
         this.$store.commit("schools/nextPage");
-        // this.schools = this.$store.getters["schools/onePage"];
         window.scrollTo(0, top);
       }
     },
@@ -136,6 +111,21 @@ export default {
   display: grid;
   grid-gap: 10px;
   grid-auto-rows: 1fr;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(-10px);
+  opacity: 0;
+}
+.filter-button {
+  margin: 5px;
 }
 </style>
 <style lang="sass" scoped>

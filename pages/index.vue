@@ -3,7 +3,7 @@
     <h1 class="title is-large">Детские кружки в г. Запорожье</h1>
     <div class="mapwrapper">
       <!-- <div class="dumb"></div> -->
-      <button class="button is-light" @click="toggleFilter">
+      <button class="button is-light filter-button" @click="toggleFilter">
         Показать фильтр
       </button>
       <GmapMap
@@ -41,7 +41,9 @@
         </GmapCluster>
       </GmapMap>
     </div>
-    <appSidebar class="sidebar" />
+    <transition name="slide-fade">
+      <appSidebar class="sidebar" />
+    </transition>
   </div>
 </template>
 
@@ -173,20 +175,20 @@ export default {
   grid-template-rows: auto 50px;
   grid-template-areas:
     "title title"
-    "cardwrapper sidebar"
+    "mapwrapper sidebar"
     "pagination sidebar";
   grid-gap: 10px;
 }
-.mainwrapper .nosidebar {
+.mainwrapper.nosidebar {
   grid-template-areas:
     "title"
-    "cardwrapper"
+    "mapwrapper"
     "pagination";
   grid-template-columns: auto;
 }
 
 .mapwrapper {
-  grid-area: cardwrapper;
+  grid-area: mapwrapper;
   display: grid;
   grid-gap: 10px;
 }
@@ -200,7 +202,23 @@ export default {
 .map {
   justify-self: center;
 }
+.filter-button {
+  margin: 5px auto;
+  width: 150px;
+  display: block;
+}
 
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(-10px);
+  opacity: 0;
+}
 /* Don't use this in real life, it may hide unexpected elements */
 /* ::v-deep .gm-ui-hover-effect {
   display: none!important;

@@ -2,7 +2,7 @@ export const state = () => ({
   page:0,
   schools:[],
   perPage: 12,
-  showFilter: true,
+  showFilter: false,
   filterTag:"Все",
   filterDistrict: "Все",
 })
