@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar " role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
+      <a class="navbar-item" href="@/">
         <img src="@/static/logo.png" />
       </a>
 
@@ -53,7 +53,8 @@
         <div class="navbar-item">
           <div class="field has-addons search">
             <p class="control">
-              <input class="input" type="text" placeholder="Найти..." />
+              <!-- <input class="input" type="text" placeholder="" /> -->
+              <AppSearch />
             </p>
           </div>
         </div>
@@ -67,35 +68,6 @@
             >
           </div>
         </div>
-
-        <!-- <NuxtLink to="/contacts" class="navbar-item" @click>
-          Написать нам
-        </NuxtLink> -->
-        <!-- <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            Город
-          </a>
-
-          <div class="navbar-dropdown">
-            <a class="navbar-item">
-              Запорожье
-            </a>
-            <a class="navbar-item">
-              Киев
-            </a>
-          </div>
-        </div>
-        -->
-        <!-- <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-primary has-background-success">
-              <strong>Регистрация</strong>
-            </a>
-            <a class="button is-light">
-              Вход
-            </a>
-          </div>
-        </div>  -->
       </div>
     </div>
     <!-- Modal -->
@@ -171,15 +143,11 @@
 </template>
 
 <script>
+import AppSearch from "@/components/AppSearch.vue";
 export default {
-  // async asyncData(context) {
-  //   await context.store.dispatch("schools/fetchSchools");
-  // },
-  // async fetch() {
-  //   console.log("fetch");
-  //   await this.$store.dispatch("schools/fetchSchools");
-  // },
-  // fetchOnServer: false,
+  components: {
+    AppSearch
+  },
   data() {
     return {
       isHamburgerOpen: false,
@@ -187,11 +155,7 @@ export default {
       showModal: false
     };
   },
-  // computed: {
-  //   tags() {
-  //     return
-  //   }
-  // },
+
   async created() {
     await this.$store.dispatch("schools/fetchSchools");
     this.tags = this.$store.getters["schools/tags"];
@@ -210,7 +174,7 @@ export default {
 
 <style>
 .search {
-  max-width: 100px;
+  max-width: 200px;
 }
 .hidden {
   display: none;

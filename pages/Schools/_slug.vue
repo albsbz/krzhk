@@ -12,12 +12,13 @@
           #{{ tag }}</span
         >
       </div>
-      <div class="content"><nuxt-content :document="school" /></div>
-      <div class="carousel-wrapper">
-        <no-ssr placeholder="Loading...">
+
+      <div v-if="school.photos" class="carousel-wrapper">
+        <client-only placeholder="Loading...">
           <carousel :data="carouseldata"></carousel>
-        </no-ssr>
+        </client-only>
       </div>
+      <div class="content"><nuxt-content :document="school" /></div>
     </div>
   </section>
 </template>
@@ -31,33 +32,21 @@ export default {
 
     return { slug, school };
   },
-  data() {
-    return {
-      carouseldata: [
-        {
-          id: 1,
-          message: "First message",
+  computed: {
+    carouseldata() {
+      return this.school.photos?.map((pic, i) => {
+        return {
+          id: i,
           content(createElement, content) {
             return createElement("img", {
               attrs: {
-                src: require("~/assets/lesson-1.jpg")
+                src: require(`~/assets/schoolsPictures/${pic}`)
               }
             });
           }
-        },
-        {
-          id: 2,
-          message: "Any message",
-          content(createElement, content) {
-            return createElement("img", {
-              attrs: {
-                src: require("~/assets/lesson-2.png")
-              }
-            });
-          }
-        }
-      ]
-    };
+        };
+      });
+    }
   }
 };
 </script>

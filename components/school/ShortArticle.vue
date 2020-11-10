@@ -5,8 +5,11 @@
         <figure class="image is-4by3">
           <NLink :to="'schools/' + school.title">
             <img
-              src="https://bulma.io/images/placeholders/1280x960.png"
+              :src="
+                require(`~/assets/schoolsPictures/${getSchoolPicture(school)}`)
+              "
               alt="Placeholder image"
+              class="school-photo"
           /></NLink>
         </figure>
       </div>
@@ -15,8 +18,9 @@
           <div class="media-left">
             <figure class="image is-48x48">
               <img
-                src="https://bulma.io/images/placeholders/96x96.png"
+                :src="require(`~/assets/genres/${genreLogo(school.tags[0])}`)"
                 alt="Placeholder image"
+                class="genre"
               />
             </figure>
           </div>
@@ -60,6 +64,7 @@
 </template>
 
 <script>
+import { genres } from "./genreMapping";
 export default {
   props: ["school"],
   computed: {
@@ -75,6 +80,16 @@ export default {
     },
     setDistrict() {
       this.$store.commit("schools/setFilterDistrict", this.school.district);
+    },
+    genreLogo(tag) {
+      return genres[tag] ? genres[tag] : genres.default;
+    },
+    getSchoolPicture(school) {
+      if (school.photos) {
+        return school.photos[0];
+      } else {
+        return "activities.jpg";
+      }
     }
   }
 };
@@ -100,5 +115,9 @@ export default {
 .card {
   display: flex;
   flex-direction: column;
+}
+.genre {
+  object-fit: cover;
+  height: 100%;
 }
 </style>
