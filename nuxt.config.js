@@ -2,6 +2,9 @@ export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: true,
   target:'static',
+  router: {
+    base: '/krzhk/'
+  },
   env: {
     GMAP_API_KEY: 'AIzaSyA5X3nMtXIcE__bKV8sSB3xqzxzxC_Urm0'
   },
