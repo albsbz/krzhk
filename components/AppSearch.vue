@@ -9,6 +9,7 @@
             autocomplete="off"
             placeholder="Найти..."
             class="input"
+            @keyup.enter="goToSearchResult"
           />
         </div>
       </div>
@@ -21,7 +22,7 @@
       role="menu"
     >
       <div
-        v-for="result of searchResults"
+        v-for="result of searchResultsToShow"
         :key="result.title"
         class="dropdown-content"
       >
@@ -42,6 +43,9 @@ export default {
     };
   },
   computed: {
+    searchResultsToShow() {
+      return this.searchResults.slice(0, 5);
+    },
     showResults() {
       return !this.searchQuery;
     },
@@ -57,9 +61,23 @@ export default {
         return;
       }
       this.searchResults = await this.$content("Schools")
-        .limit(6)
-        .search("title", searchQuery)
+        .search(searchQuery)
         .fetch();
+    },
+    $route() {
+      this.searchQuery = "";
+    }
+  },
+  methods: {
+    goToSearchResult() {
+      if (this.showResults) {
+        this.searchResults = [];
+        return;
+      }
+      this.$store.commit("search/setSearchResults", this.searchResults);
+      this.$router.push({
+        path: "/search"
+      });
     }
   }
 };

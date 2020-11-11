@@ -52,10 +52,10 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="field has-addons search">
-            <p class="control">
+            <div class="control">
               <!-- <input class="input" type="text" placeholder="" /> -->
               <AppSearch />
-            </p>
+            </div>
           </div>
         </div>
 
