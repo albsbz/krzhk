@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ $route.params.slug }}
     <section class="hero is-info is-medium is-bold">
       <div class="hero-body">
         <div class="container has-text-centered">

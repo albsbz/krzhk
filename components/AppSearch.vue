@@ -75,6 +75,7 @@ export default {
         return;
       }
       this.$store.commit("search/setSearchResults", this.searchResults);
+      this.searchQuery = "";
       this.$router.push({
         path: "/search"
       });
